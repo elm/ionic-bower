@@ -9,7 +9,6 @@
   "keywords": ["mobile", "html5", "ionic", "cordova", "phonegap", "trigger", "triggerio", "angularjs", "angular"],
   "license": "MIT",
   "private": false,
-  "ignore": ["**/.*", "CONTRIBUTING.md", "Gruntfile.js", "component.json", "config", "examples", "package.json", "release/js/angular", "release/js/angular-ui", "scripts", "test", "js/controllers", "js/ext", "js/utils", "js/views", "js/_license.js", "js/ionic.js"],
   "dependencies": {
     "angular": "1.2.12",
     "angular-animate": "1.2.12",
