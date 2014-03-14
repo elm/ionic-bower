@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.10.0-alpha-nightly-1195
+ * Ionic, v0.10.0-alpha
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -641,7 +641,7 @@ window.ionic = {
     // whatever lookup was done to find this element failed to find it
     // so we can't listen for events on it.
     if(element === null) {
-      void 0;
+      console.error('Null element passed to gesture (element does not exist). Not listening for gesture');
       return;
     }
 
@@ -2008,7 +2008,7 @@ window.ionic = {
      */
     device: function() {
       if(window.device) return window.device;
-      if(this.isCordova()) void 0;
+      if(this.isCordova()) console.error('device plugin required');
       return {};
     },
 
@@ -2342,7 +2342,7 @@ window.ionic = {
 
     if(ele.disabled || ele.type === 'file') return;
 
-    void 0;
+    console.debug('tapElement', ele.tagName, ele.className);
 
     var c = getCoordinates(e);
 
@@ -2368,7 +2368,7 @@ window.ionic = {
     }
 
     if(target.control) {
-      void 0;
+      console.debug('tapElement, target.control, stop');
       return stopEvent(e);
     }
   };
@@ -2382,7 +2382,7 @@ window.ionic = {
 
     if( isRecentTap(e) ) {
       // if a tap in the same area just happened, don't continue
-      void 0;
+      console.debug('tapPolyfill', 'isRecentTap', ele.tagName);
       return stopEvent(e);
     }
 
@@ -2411,7 +2411,26 @@ window.ionic = {
 
   function preventGhostClick(e) {
 
-    void 0;
+    console.debug((function(){
+      // Great for debugging, and thankfully this gets removed from the build, OMG it's ugly
+
+      if(e.target.control) {
+        // this is a label that has an associated input
+        // the native layer will send the actual event, so stop this one
+        console.debug('preventGhostClick', 'label');
+
+      } else if(isRecentTap(e)) {
+        // a tap has already happened at these coordinates recently, ignore this event
+        console.debug('preventGhostClick', 'isRecentTap', e.target.tagName);
+
+      } else if(isScrolledSinceStart(e)) {
+        // this click's coordinates are different than its touchstart/mousedown, must have been scrolling
+        console.debug('preventGhostClick', 'isScrolledSinceStart, startCoordinates, x:' + startCoordinates.x + ' y:' + startCoordinates.y);
+      }
+
+      var c = getCoordinates(e);
+      return 'click at x:' + c.x + ', y:' + c.y;
+    })());
 
 
     if(e.target.control || isRecentTap(e) || isScrolledSinceStart(e)) {
@@ -2742,7 +2761,7 @@ function androidKeyboardFix() {
     if (rememberedDeviceWidth !== window.innerWidth) {
       rememberedDeviceWidth = window.innerWidth;
       rememberedDeviceHeight = window.innerHeight;
-      void 0;
+      console.info('orientation change. deviceWidth =', rememberedDeviceWidth, ', deviceHeight =', rememberedDeviceHeight);
 
     //If the height changes, and it's less than before, we have a keyboard open
     } else if (rememberedDeviceHeight !== window.innerHeight &&
